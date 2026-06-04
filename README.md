@@ -4,6 +4,8 @@ Lyuks to‘yxona bron platformasi (MVP) — Next.js 14, Prisma, NextAuth.
 
 **To‘liq hujjat (o‘rnatish, API, rollar, bron oqimi, production):** [YOR-YOR-HUJJAT.md](./YOR-YOR-HUJJAT.md)
 
+**Vercel deploy va npm ogohlantirishlar:** [VERCEL.md](./VERCEL.md)
+
 **Ishlar jurnali:** [LOYIHA-ISHLARI.md](./LOYIHA-ISHLARI.md)
 
 ## Tezkor start
