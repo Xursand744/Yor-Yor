@@ -6,6 +6,7 @@ import { MapPin, Search, Star } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { Navbar } from "@/components/Navbar";
+import { VenueImage } from "@/components/VenueImage";
 import { formatUzs } from "@/lib/format";
 import type { VenueResponse } from "@/types/venue";
 
@@ -159,10 +160,10 @@ export function LandingPage({ venues }: LandingPageProps) {
                   className="group flex h-full flex-col overflow-hidden rounded-2xl border border-violet-100/90 bg-white shadow-md shadow-violet-900/5 transition hover:border-violet-300 hover:shadow-xl"
                 >
                   {v.images[0] ? (
-                    <img
+                    <VenueImage
                       src={v.images[0].imageUrl}
                       alt={`${v.name} rasmi`}
-                      className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+                      containerClassName="h-44 transition duration-500 group-hover:scale-[1.02]"
                     />
                   ) : (
                     <div className="h-44 bg-gradient-to-br from-violet-600/20 to-fuchsia-400/30" />

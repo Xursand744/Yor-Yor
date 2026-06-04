@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ManageBookingsPanel } from "@/components/admin/ManageBookingsPanel";
+import { VenueImage } from "@/components/VenueImage";
 import { apiUrl } from "@/lib/api-url";
 import { getDayDisplayState } from "@/lib/calendar-display";
 import type { VenueCalendarResponse } from "@/types/booking";
@@ -419,7 +420,11 @@ export function AdminPanel() {
           {images.length === 0 && <p className="submit-msg">Hozircha rasm yo&apos;q</p>}
           {images.map((img) => (
             <div key={img.id} className="image-item">
-              <img src={img.imageUrl} alt="To&apos;yxona rasmi" />
+              <VenueImage
+                src={img.imageUrl}
+                alt="To&apos;yxona rasmi"
+                containerClassName="h-[120px]"
+              />
               <button
                 type="button"
                 className="danger"
@@ -793,12 +798,6 @@ export function AdminPanel() {
           border-radius: 10px;
           overflow: hidden;
           background: var(--bg);
-        }
-        .image-item img {
-          width: 100%;
-          height: 120px;
-          object-fit: cover;
-          display: block;
         }
         .danger {
           width: 100%;

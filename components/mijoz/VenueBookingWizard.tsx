@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BookingLoginGate } from "@/components/mijoz/BookingLoginGate";
+import { VenueImage } from "@/components/VenueImage";
 import { apiUrl } from "@/lib/api-url";
 import { getDayDisplayState, isSlotTaken } from "@/lib/calendar-display";
 import { calcAdvanceAmount, formatUzs } from "@/lib/format";
@@ -78,11 +79,13 @@ export function VenueBookingWizard({ venue }: { venue: VenueResponse }) {
   const advanceAmount = calcAdvanceAmount(venue.basePrice, venue.advancePercent);
   const payNow = paymentPlan === "full" ? venue.basePrice : advanceAmount;
 
+  const sessionUser = session?.user;
+
   useEffect(() => {
-    if (!canBook || !session?.user) return;
-    if (session.user.name) setClientName(session.user.name);
-    if (session.user.phone) setClientPhone(session.user.phone);
-  }, [canBook, session?.user?.name, session?.user?.phone]);
+    if (!canBook || !sessionUser) return;
+    if (sessionUser.name) setClientName(sessionUser.name);
+    if (sessionUser.phone) setClientPhone(sessionUser.phone);
+  }, [canBook, sessionUser]);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -267,11 +270,11 @@ export function VenueBookingWizard({ venue }: { venue: VenueResponse }) {
           <h2 className="mb-3 font-semibold">To&apos;yxona rasmlari</h2>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             {venue.images.map((image) => (
-              <img
+              <VenueImage
                 key={image.id}
                 src={image.imageUrl}
                 alt={`${venue.name} rasmi`}
-                className="h-32 w-full rounded-xl object-cover"
+                containerClassName="h-32 rounded-xl"
               />
             ))}
           </div>

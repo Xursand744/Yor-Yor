@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 import { distanceKm, formatDistanceKm, sortByDistance } from "@/lib/geo";
 import { useGeolocation } from "@/lib/hooks/use-geolocation";
+import { VenueImage } from "@/components/VenueImage";
 import { formatUzs } from "@/lib/format";
 import type { VenueResponse } from "@/types/venue";
 
@@ -35,10 +36,10 @@ function VenueCard({
         }`}
       >
         {venue.images[0] ? (
-          <img
+          <VenueImage
             src={venue.images[0].imageUrl}
             alt={`${venue.name} rasmi`}
-            className="h-40 w-full object-cover"
+            containerClassName="h-40"
           />
         ) : (
           <div className="h-2 bg-gradient-to-r from-[#d4a574] to-[#b8860b]" />
