@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Venue {
+  id             String    @id @default(cuid())
+  name           String
+  capacity       Int
+  address        String
+  phone          String
+  latitude       Float?
+  longitude      Float?
+  basePrice      Int       @default(0)
+  advancePercent Int       @default(30)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  bookings       Booking[]
+  users          User[]
+  images         VenueImage[]
+  reviews        VenueReview[]
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  phone         String?   @unique
+  emailVerified DateTime?
+  password      String
+  role          String    @default("manager")
+  venueId       String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  venue    Venue?    @relation(fields: [venueId], references: [id], onDelete: SetNull)
+  accounts Account[]
+  sessions Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model EventSlot {
+  id       String    @id @default(cuid())
+  slotName String    @unique
+  bookings Booking[]
+}
+
+model Booking {
+  id            String    @id @default(cuid())
+  venueId       String
+  bookingDate   DateTime
+  slotId        String
+  clientName    String
+  clientPhone   String
+  status        String    @default("pending")
+  totalAmount   Int       @default(0)
+  paidAmount    Int       @default(0)
+  paymentStatus String    @default("unpaid")
+  createdAt     DateTime  @default(now())
+
+  venue    Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  slot     EventSlot @relation(fields: [slotId], references: [id])
+  payments Payment[]
+
+  @@index([venueId, bookingDate])
+  @@index([venueId, bookingDate, slotId, status])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  bookingId String
+  amount    Int
+  type      String
+  method    String   @default("online")
+  status    String   @default("completed")
+  createdAt DateTime @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+model VenueImage {
+  id        String   @id @default(cuid())
+  venueId   String
+  imageUrl  String
+  createdAt DateTime @default(now())
+
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId])
+}
+
+model VenueReview {
+  id         String   @id @default(cuid())
+  venueId    String
+  clientName String
+  rating     Int
+  comment    String
+  createdAt  DateTime @default(now())
+
+  venue Venue @relation(fields: [venueId], references: [id], onDelete: Cascade)
+
+  @@index([venueId, createdAt])
+}
+

@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-toy-bg text-toy-text antialiased;
+  }
+}
+
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-landing-fade {
+  animation: landing-fade-up 0.8s ease-out both;
+}
+
+.animate-landing-fade-delay {
+  animation: landing-fade-up 1s ease-out 0.15s both;
+}

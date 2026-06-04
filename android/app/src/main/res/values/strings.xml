@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Yor Yor</string>
+    <string name="title_activity_main">Yor Yor</string>
+    <string name="package_name">uz.yoryor.app</string>
+    <string name="custom_url_scheme">uz.yoryor.app</string>
+</resources>
