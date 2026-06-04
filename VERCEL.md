@@ -17,13 +17,23 @@ Ko‘p qatorlar **xato emas** — `npm install` davomida chiqadigan eskirgan **b
 
 ## Vercel Environment Variables
 
-Loyiha papkasida (Settings → Environment Variables):
+**Settings → Environment Variables** (Production + Preview):
 
-| O‘zgaruvchi | Misol |
+| O‘zgaruvchi | Majburiy | Misol |
+|-------------|----------|--------|
+| `DATABASE_URL` | Ha | PostgreSQL URL (Neon, Supabase, Vercel Postgres) — **SQLite ishlamaydi** |
+| `NEXTAUTH_URL` | Ha* | `https://sizning-loyiha.vercel.app` |
+| `NEXTAUTH_SECRET` | Ha | uzun random string (32+ belgi) |
+
+\* `NEXTAUTH_URL` bo‘lmasa Vercel `VERCEL_URL` dan avtomatik `https://...` yig‘iladi; baribir production domeningizni yozish yaxshiroq.
+
+### Olib tashlang (agar qo‘yilgan bo‘lsa)
+
+| O‘zgaruvchi | Sabab |
 |-------------|--------|
-| `DATABASE_URL` | PostgreSQL (Vercel Postgres, Neon, Supabase…) — **SQLite Vercelda ishlamaydi** |
-| `NEXTAUTH_URL` | `https://sizning-loyiha.vercel.app` |
-| `NEXTAUTH_SECRET` | uzun random string (32+ belgi) |
+| `BUILD_STATIC=1` | Static export — API/Prisma bilan Vercelda **ishlamaydi**, `Invalid URL` va export xatolari |
+
+`npm run build` = oddiy server build (to‘g‘ri variant).
 
 SQLite (`file:./prisma/dev.db`) faqat **lokal** kompyuter uchun.
 
@@ -43,6 +53,14 @@ SQLite (`file:./prisma/dev.db`) faqat **lokal** kompyuter uchun.
 2. Vercel Environment ga qo‘ying.
 3. Lokal: `DATABASE_URL` ni PostgreSQL qilib `npx prisma db push` yoki `migrate deploy`.
 4. `npm run db:seed` (ixtiyoriy).
+
+---
+
+## `TypeError: Invalid URL` (build paytida)
+
+Sabab: `NEXTAUTH_URL` bo‘sh (`""`) yoki noto‘g‘ri — next-auth `new URL()` da yiqiladi.
+
+**Yechim:** yuqoridagi env larni qo‘ying; `BUILD_STATIC` ni olib tashlang; `capacitor.config.ts` bo‘lmasligi kerak (o‘chirilgan).
 
 ---
 
